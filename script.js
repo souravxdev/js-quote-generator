@@ -1,3 +1,10 @@
+// DOM
+const quoteContainer = document.getElementById('quote-container');
+const quoteText = document.getElementById('quote');
+const authorText = document.getElementById('author');
+const twitterBtn = document.getElementById('twitter');
+const newQuoteBtn = document.getElementById('new-quote');
+
 let apiQuotes = [];
 // global variable
 // the reason we are using let here is because in the beggining we are setting it as an empty array but in the bellow getQuotes() function,
@@ -18,7 +25,21 @@ function newQuote() {
 
     // Pick a Random Quote from Local File Array
     // const quote = localQuotes[Math.floor(Math.random() * localQuotes.length)];
-    console.log(quote);
+
+    // Check if the Author Field is Blank and Replace it with 'Unknown'
+    if (!quote.author) {
+        authorText.textContent = 'Unknown';
+    } else {
+        authorText.textContent = quote.author;
+    }
+
+    // Check Quote Length to Determine Styling
+    if (quote.quote.length > 100) {
+        quoteText.classList.add('long-quote');
+    } else {
+        quoteText.classList.remove('long-quote');
+    }
+    quoteText.textContent = quote.quote;
 }
 
 // Get Quotes From API
@@ -28,8 +49,8 @@ async function getQuotes() {
         const response = await fetch(apiUrl);
         // as we have used await here, so response variable will not be populated untill it has some data fetched from the API.
         // that means by default, if we do not do asynchronous and we do not await,
-        // it would try to set this response value before it had a chance to fetch, and that will cause an error
-        // so in this case we are only setting the response constant when we actually have sata and it can be set or else it will just be undefined.
+        // without async-await it would try to set this response value before it had a chance to fetch, and that will cause an error
+        // so in this case we are only setting the response constant when we actually have data and it can be set or else it will just be undefined.
 
         apiQuotes = await response.json();
         // using the global variable, and we have to declare it above of this function from being availabe in every function and not just in this function.
@@ -44,6 +65,16 @@ async function getQuotes() {
         // alert(error);
     }
 }
+
+// Tweet Quote
+function tweetQuote() {
+    const tweeterUrl = `https://twitter.com/intent/tweet?text=${quoteText.textContent}  - ${authorText.textContent}`;
+    window.open(tweeterUrl, '_blank');
+}
+
+//Event Listeners to Buttons
+newQuoteBtn.addEventListener('click', newQuote);
+twitterBtn.addEventListener('click', tweetQuote);
 
 // On Page(index.html) Load
 getQuotes();

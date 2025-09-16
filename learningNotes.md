@@ -10,6 +10,8 @@
 
 -   https://dummyjson.com/quotes?limit=0 : Quotes API
 
+-   https://twitter.com/intent/tweet : With this link we are going to able to tweet a quote, it will pre-populate a tweet with the quote text and quote author.
+
 ### CSS Rules
 
 -   cdn : content delivery network
